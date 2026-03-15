@@ -240,13 +240,14 @@ local function open_card_editor(topic, used, limit, backlinks)
     "",
     "─────────────────────────────────────────────────────────────────",
     "  Write your question and answer above.",
-    "  <leader>s to save card.  q to cancel.",
+    "  <leader>s or :w to save.  q to cancel.",
   }
 
   vim.api.nvim_buf_set_lines(buf, 0, -1, false, template)
   vim.api.nvim_set_option_value("filetype", "markdown", { buf = buf })
   vim.api.nvim_set_option_value("bufhidden", "wipe", { buf = buf })
-  vim.api.nvim_set_option_value("buftype", "nofile", { buf = buf })
+  vim.api.nvim_set_option_value("buftype", "acwrite", { buf = buf })
+  vim.api.nvim_buf_set_name(buf, "mnemonic://new-card")
 
   local win = vim.api.nvim_open_win(buf, true, {
     relative  = "editor",
@@ -306,6 +307,11 @@ local function open_card_editor(topic, used, limit, backlinks)
   end
 
   vim.keymap.set({ "n", "i" }, "<leader>s", save_card, { buffer = buf, nowait = true, desc = "Save card" })
+  vim.api.nvim_create_autocmd("BufWriteCmd", {
+    buffer   = buf,
+    once     = true,
+    callback = save_card,
+  })
   vim.keymap.set("n", "<leader>b", function()
     vim.api.nvim_win_close(win, true)
     pick_backlinks(topic, used, limit)
@@ -344,7 +350,7 @@ local function pick_backlinks(topic, used, limit)
             table.insert(backlinks, entry.value)
           end
           actions.close(prompt_buf)
-          reopen()
+          vim.schedule(reopen)
         end)
 
         -- <C-z>: undo last backlink
@@ -356,7 +362,7 @@ local function pick_backlinks(topic, used, limit)
             vim.notify("Nothing to undo.", vim.log.levels.WARN)
           end
           actions.close(prompt_buf)
-          reopen()
+          vim.schedule(reopen)
         end)
         map("n", "<C-z>", function()
           if #backlinks > 0 then
@@ -366,37 +372,37 @@ local function pick_backlinks(topic, used, limit)
             vim.notify("Nothing to undo.", vim.log.levels.WARN)
           end
           actions.close(prompt_buf)
-          reopen()
+          vim.schedule(reopen)
         end)
 
         -- <C-d>: done, open editor
         map("i", "<C-d>", function()
           actions.close(prompt_buf)
-          open_card_editor(topic, used, limit, backlinks)
+          vim.schedule(function() open_card_editor(topic, used, limit, backlinks) end)
         end)
         map("n", "<C-d>", function()
           actions.close(prompt_buf)
-          open_card_editor(topic, used, limit, backlinks)
+          vim.schedule(function() open_card_editor(topic, used, limit, backlinks) end)
         end)
 
         -- <Esc>: skip backlinks, open editor directly
         map("i", "<Esc>", function()
           actions.close(prompt_buf)
-          open_card_editor(topic, used, limit, backlinks)
+          vim.schedule(function() open_card_editor(topic, used, limit, backlinks) end)
         end)
         map("n", "<Esc>", function()
           actions.close(prompt_buf)
-          open_card_editor(topic, used, limit, backlinks)
+          vim.schedule(function() open_card_editor(topic, used, limit, backlinks) end)
         end)
 
         -- <C-b>: back to topic selection
         map("i", "<C-b>", function()
           actions.close(prompt_buf)
-          M.new_card()
+          vim.schedule(function() M.new_card() end)
         end)
         map("n", "<C-b>", function()
           actions.close(prompt_buf)
-          M.new_card()
+          vim.schedule(function() M.new_card() end)
         end)
 
         return true
@@ -610,12 +616,13 @@ function M.manage_cards()
           "",
           "─────────────────────────────────────────────────────────────────",
           "  Edit question and answer above.",
-          "  <leader>s to save.  q to cancel.",
+          "  <leader>s or :w to save.  q to cancel.",
         }
         vim.api.nvim_buf_set_lines(ebuf, 0, -1, false, template)
         vim.api.nvim_set_option_value("filetype",  "markdown", { buf = ebuf })
         vim.api.nvim_set_option_value("bufhidden", "wipe",     { buf = ebuf })
-        vim.api.nvim_set_option_value("buftype",   "nofile",   { buf = ebuf })
+        vim.api.nvim_set_option_value("buftype",   "acwrite",  { buf = ebuf })
+        vim.api.nvim_buf_set_name(ebuf, "mnemonic://edit-card")
 
         local EW, EH = 70, 20
         local ewin = vim.api.nvim_open_win(ebuf, true, {
@@ -672,6 +679,11 @@ function M.manage_cards()
         vim.keymap.set({ "n", "i" }, "<leader>s", save_edit,   { buffer = ebuf, nowait = true })
         vim.keymap.set("n",          "q",          cancel_edit, { buffer = ebuf, nowait = true })
         vim.keymap.set("n",          "<Esc>",      cancel_edit, { buffer = ebuf, nowait = true })
+        vim.api.nvim_create_autocmd("BufWriteCmd", {
+          buffer   = ebuf,
+          once     = true,
+          callback = save_edit,
+        })
       end, { buffer = buf, nowait = true })
 
       -- Delete card

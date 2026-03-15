@@ -53,6 +53,8 @@ The answer field in a mnemonic card is not a definition copied from a textbook. 
 
 This matters because memory is reconstructive. When you review a card, you are not reading a fact — you are re-activating the neural network that formed when you first understood the concept. A card written in your own voice re-activates that network more effectively than a card written in someone else's.
 
+Use backlinks to connect the card to your notes. The answer field should be your thinking, not a transcript.
+
 ### The neuroscience behind the design
 
 Every design decision in mnemonic.nvim is grounded in how memory actually works:
@@ -86,7 +88,7 @@ Every design decision in mnemonic.nvim is grounded in how memory actually works:
   },
   config = function()
     require("mnemonic").setup({
-      -- Path to your notes vault
+      -- Path to your notes vault, backlinks selector root path
       vault = "~/notes",
 
       -- Max cards you can create per topic per day
@@ -162,7 +164,7 @@ These are plain JSON files. You can inspect, back up, or version-control them al
 
 ### Creating a card
 
-1. Press `<leader>nca`
+1. Press `:MnemonicNew`
 2. Select an existing topic or create a new one
 3. Your daily quota is shown — e.g. `2/5 used today`
 4. Use Telescope to select backlinks (notes related to this card)
@@ -172,11 +174,13 @@ These are plain JSON files. You can inspect, back up, or version-control them al
    - `<Esc>` — skip backlinks, open the editor directly
    - `<C-b>` — go back to topic selection
 5. Write your question under `# Question` and your answer under `# Answer`
-6. Press `<leader>s` to save
+6. Press `:wq` to save
+
+![](assets/2026-03-15-19-17-55.png)
 
 ### Reviewing
 
-1. Press `<leader>ncr`
+1. Press `:MnemonicReview`
 2. Choose to review a specific topic or all active topics
 3. Read the question — think before revealing
 4. Press `<Space>` to reveal the answer
@@ -187,22 +191,30 @@ These are plain JSON files. You can inspect, back up, or version-control them al
    - `3` Good — recalled correctly
    - `4` Easy — recalled instantly
 
+![](assets/2026-03-15-19-36-46.png)
+
 ### Managing cards
 
-Press `<leader>ncm` to browse cards by topic. Select a card to:
+Press `:MnemonicCards` to browse cards by topic. Select a card to:
 
-- `e` — edit question and answer
+- `e` — edit question and answer, `:wq` to save
 - `d` — delete the card (with confirmation)
 - `a` — archive or restore the card
 - `q` — close
 
+![](assets/2026-03-15-19-38-15.png)
+
+![](assets/2026-03-15-19-38-49.png)
+
 ### Topic lifecycle
 
-Press `<leader>nct` to manage topics:
+Press `:MnemonicManage` to manage topics:
 
 - **Archive** — stops scheduling all cards in the topic
 - **Reactivate** — resumes scheduling
 - **Delete** — permanently removes the topic and all its cards
+
+![](assets/2026-03-15-19-39-51.png)
 
 ---
 
