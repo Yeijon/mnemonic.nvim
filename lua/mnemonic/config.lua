@@ -7,8 +7,8 @@ M.defaults = {
   -- Path to store data files (relative to vault root)
   data_dir = ".mnemonic",
 
-  -- Vault root path
-  vault = vim.fn.expand("~/Library/Mobile Documents/com~apple~CloudDocs/notes"),
+  -- Vault root path (defaults to current working directory)
+  vault = vim.fn.getcwd(),
 
   -- Daily card creation limit per topic
   daily_limit = 5,
