@@ -174,9 +174,11 @@ These are plain JSON files. You can inspect, back up, or version-control them al
    - `<Esc>` — skip backlinks, open the editor directly
    - `<C-b>` — go back to topic selection
 5. Write your question under `# Question` and your answer under `# Answer`
-6. Press `:wq` to save
+6. Press `:w` to save
 
-![](assets/2026-03-15-19-17-55.png)
+![](https://yeijon-note.oss-cn-beijing.aliyuncs.com/yeijon-note/img/nvim-paste-1773575627.png)
+![](https://yeijon-note.oss-cn-beijing.aliyuncs.com/yeijon-note/img/nvim-paste-1773575595.png)
+![](https://yeijon-note.oss-cn-beijing.aliyuncs.com/yeijon-note/img/nvim-paste-1773575684.png)
 
 ### Reviewing
 
@@ -191,7 +193,8 @@ These are plain JSON files. You can inspect, back up, or version-control them al
    - `3` Good — recalled correctly
    - `4` Easy — recalled instantly
 
-![](assets/2026-03-15-19-36-46.png)
+![](https://yeijon-note.oss-cn-beijing.aliyuncs.com/yeijon-note/img/nvim-paste-1773575709.png)
+![](https://yeijon-note.oss-cn-beijing.aliyuncs.com/yeijon-note/img/nvim-paste-1773575776.png)
 
 ### Managing cards
 
@@ -202,9 +205,7 @@ Press `:MnemonicCards` to browse cards by topic. Select a card to:
 - `a` — archive or restore the card
 - `q` — close
 
-![](assets/2026-03-15-19-38-15.png)
-
-![](assets/2026-03-15-19-38-49.png)
+![](https://yeijon-note.oss-cn-beijing.aliyuncs.com/yeijon-note/img/nvim-paste-1773575811.png)
 
 ### Topic lifecycle
 
@@ -214,7 +215,7 @@ Press `:MnemonicManage` to manage topics:
 - **Reactivate** — resumes scheduling
 - **Delete** — permanently removes the topic and all its cards
 
-![](assets/2026-03-15-19-39-51.png)
+![](https://yeijon-note.oss-cn-beijing.aliyuncs.com/yeijon-note/img/nvim-paste-1773576045.png)
 
 ---
 

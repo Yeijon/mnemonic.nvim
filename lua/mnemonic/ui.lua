@@ -5,6 +5,20 @@ local db   = require("mnemonic.db")
 local fsrs = require("mnemonic.fsrs")
 local config = require("mnemonic.config")
 
+-- Close any leftover dressing.nvim or floating windows before opening new UI
+local function cleanup()
+  for _, win in ipairs(vim.api.nvim_list_wins()) do
+    if vim.api.nvim_win_is_valid(win) then
+      local buf = vim.api.nvim_win_get_buf(win)
+      local ft  = vim.api.nvim_get_option_value("filetype", { buf = buf })
+      local bt  = vim.api.nvim_get_option_value("buftype",  { buf = buf })
+      if ft == "DressingSelect" or ft == "DressingInput" then
+        pcall(vim.api.nvim_win_close, win, true)
+      end
+    end
+  end
+end
+
 -- ── Helpers ───────────────────────────────────────────────────────────────
 
 local function create_float(lines, opts)
@@ -192,6 +206,7 @@ local function show_review(cards, index, session_stats)
 end
 
 function M.start_review()
+  cleanup()
   local all_cards = db.load_cards().cards
 
   vim.ui.select(
@@ -414,6 +429,7 @@ local function pick_backlinks(topic, used, limit)
 end
 
 function M.new_card()
+  cleanup()
   select_topic(function(topic)
     local used  = db.cards_created_today(topic.topic_id)
     local limit = topic.daily_limit or config.options.daily_limit
@@ -433,6 +449,7 @@ end
 -- ── Topic Management ──────────────────────────────────────────────────────
 
 function M.manage_topics()
+  cleanup()
   local topics = db.load_topics().topics
   if #topics == 0 then
     vim.notify("No topics yet. Create one with <leader>nq", vim.log.levels.INFO)
@@ -506,6 +523,7 @@ end
 -- ── Card Management (Browse / Edit / Delete) ─────────────────────────────
 
 function M.manage_cards()
+  cleanup()
   -- Step 1: select topic
   local topics = db.get_active_topics()
   local all_topics = db.load_topics().topics
